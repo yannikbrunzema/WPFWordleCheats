@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPFWordleCheats.View" xmlns:viewmodel="clr-namespace:WPFWordleCheats.ViewModel"
+             xmlns:local="clr-namespace:WPFWordleCheats.View"
+             xmlns:viewmodel="clr-namespace:WPFWordleCheats.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="1000" d:DesignWidth="1000">
     <UserControl.DataContext>
@@ -24,27 +25,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding ViewModelTitle}" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
-        
-
-        <StackPanel Orientation="Horizontal" Grid.Row="1"> 
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <ItemsControl ItemsSource="{Binding Path=Text, ElementName=InputTextBox}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="Black" BorderThickness="1" Width="100" Height="100" Margin="10">
-                                <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </StackPanel>
-            <TextBox x:Name="InputTextBox" Text="{Binding InputText}" Margin="5" Grid.Row="0" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <local:WordleTextBox Grid.Row="1">
+            
+        </local:WordleTextBox>
     </Grid>
 </UserControl>
