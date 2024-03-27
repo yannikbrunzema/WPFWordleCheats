@@ -8,13 +8,20 @@ using System.Threading.Tasks;
 
 namespace WPFWordleCheats.ViewModel
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public interface IViewModelTitleProvider
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public string ViewModelTitle { get; }
+    }
+
+    public abstract class ViewModelBase : INotifyPropertyChanged, IViewModelTitleProvider
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public abstract string ViewModelTitle { get; }
     }
 }

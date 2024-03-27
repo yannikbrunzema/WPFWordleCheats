@@ -10,7 +10,7 @@ namespace WPFWordleCheats.Model
 {
     internal class WordleModel : INotifyPropertyChanged
     {
-        private static readonly string _projectDirectory  = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+        private static readonly string _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
         private static readonly string DictionaryFileName = Path.Combine(_projectDirectory, "Resources\\wordledictionary.txt");
         private string _word;
         private HashSet<string> possibleWords = new HashSet<string>();
