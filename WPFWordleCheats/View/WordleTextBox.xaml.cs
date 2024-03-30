@@ -29,9 +29,40 @@ namespace WPFWordleCheats.View
         private string _text5;
         private string _inputText;
 
+
+        /// <summary>
+        /// Property to let other controls know that the textbox has been populated
+        /// </summary>
+        public bool TextBoxFilled => Text1.Length == 1 && Text2.Length == 1 && Text3.Length == 1 && Text4.Length == 1 && Text5.Length == 1;
+        public WordleTextBoxState TextBoxState => new WordleTextBoxState(InputText, GetCurrentColorState());
+
         public WordleTextBox()
         {
             InitializeComponent();
+        }
+
+        private char[] GetCurrentColorState()
+        {
+            char[] result =
+            [
+                GetColor(_firstChar.Background),
+                GetColor(_secondChar.Background),
+                GetColor(_thirdChar.Background),
+                GetColor(_fourthChar.Background),
+                GetColor(_fifthChar.Background),
+            ];
+            return result;
+        }
+
+        private char GetColor(Brush brush)
+        {
+            if (brush == Brushes.DarkGray)
+                return 'D';
+            else if (brush == Brushes.Yellow)
+                return 'Y';
+            else if (brush == Brushes.Green)
+                return 'G';
+            return 'D'; // making gray default for now
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -67,6 +98,9 @@ namespace WPFWordleCheats.View
                 Text5 = InputText.Substring(4, 1);
             else
                 Text5 = "";
+
+            OnPropertyChanged(nameof(TextBoxFilled));
+            OnPropertyChanged(nameof(TextBoxState));
         }
 
 
@@ -78,7 +112,7 @@ namespace WPFWordleCheats.View
             {
                 if (_inputText != value)
                 {
-                    _inputText = value;
+                    _inputText = value.ToUpper();
                     OnPropertyChanged(nameof(InputText));
                     UpdateTextBlocks();
                 }
@@ -154,12 +188,71 @@ namespace WPFWordleCheats.View
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            _inputTextBox.Focus();
+            var button = (Button)sender;
+            string textBoxName = button.Tag.ToString();
+            var charTextBox = (TextBox)this.FindName(textBoxName);
+            if (charTextBox != null)
+            {
+                if (charTextBox.Background == Brushes.DarkGray)
+                    charTextBox.Background = Brushes.Yellow;
+                else if (charTextBox.Background == Brushes.Yellow)
+                    charTextBox.Background = Brushes.Green;
+                else if (charTextBox.Background == Brushes.Green)
+                    charTextBox.Background = Brushes.DarkGray;
+                else
+                    charTextBox.Background = Brushes.DarkGray;
+            }
+            OnPropertyChanged(nameof(TextBoxState));
+        }
+
+        /// <summary>
+        /// Prevents non character input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             // Allow only numbers and letters
-            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[a-zA-Z0-9]+$"))
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[a-zA-Z]+$"))
             {
                 e.Handled = true;
+            }
+        }
+
+        public enum ColorStates
+        {
+            DarkGray,
+            Yellow,
+            Green,
+        }
+
+
+        public class WordleTextBoxState
+        {
+            public Dictionary<char, ColorStates> State { get; }
+            public WordleTextBoxState(string guess, char[] colors)
+            {
+                var _state = new Dictionary<char, ColorStates>();
+
+                for (int i = 0; i < guess.Length; i++)
+                {
+                    switch(colors[i])
+                    {
+                        case 'D':
+                            _state[guess[i]] = ColorStates.DarkGray;
+                            break;
+                        case 'Y':
+                            _state[guess[i]] = ColorStates.Yellow;
+                            break;
+                        case 'G':
+                            _state[guess[i]] = ColorStates.Green;  
+                            break;
+                    }
+                }
+                State = _state;
             }
         }
     }

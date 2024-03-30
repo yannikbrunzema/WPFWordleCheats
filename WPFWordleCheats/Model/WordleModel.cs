@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WPFWordleCheats.Model
 {
-    internal class WordleModel : INotifyPropertyChanged
+    public class WordleModel : INotifyPropertyChanged
     {
         private static readonly string _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
         private static readonly string DictionaryFileName = Path.Combine(_projectDirectory, "Resources\\wordledictionary.txt");

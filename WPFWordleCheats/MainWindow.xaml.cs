@@ -11,7 +11,6 @@ namespace WPFWordleCheats
         public MainWindow()
         {
             InitializeComponent();
-            var test = new WordleModel("TESTS", new char[] { 'H', 'E', 'A', 'R', 'D' });
         }
     }
 }
