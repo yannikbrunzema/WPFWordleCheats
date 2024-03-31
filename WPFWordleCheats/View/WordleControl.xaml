@@ -30,12 +30,12 @@
         <TextBlock Grid.Row="0" Text="{Binding ViewModelTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">
 
         </TextBlock>
-        <local:WordleTextBox x:Name="_wordBox1" Grid.Row="1"></local:WordleTextBox>
-        <local:WordleTextBox x:Name="_wordBox2" Grid.Row="2"></local:WordleTextBox>
-        <local:WordleTextBox x:Name="_wordBox3" Grid.Row="3"></local:WordleTextBox>
-        <local:WordleTextBox x:Name="_wordBox4" Grid.Row="4"></local:WordleTextBox>
-        <local:WordleTextBox x:Name="_wordBox5" Grid.Row="5"></local:WordleTextBox>
-        <local:WordleTextBox x:Name="_wordBox6" Grid.Row="6"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State1, Mode=TwoWay}" x:Name="_wordBox1"  Grid.Row="1"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State2, Mode=TwoWay}" x:Name="_wordBox2" Grid.Row="2"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State3, Mode=TwoWay}" x:Name="_wordBox3" Grid.Row="3"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State4, Mode=TwoWay}" x:Name="_wordBox4" Grid.Row="4"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State5, Mode=TwoWay}" x:Name="_wordBox5" Grid.Row="5"></local:WordleTextBox>
+        <local:WordleTextBox TextboxState="{Binding State6, Mode=TwoWay}" x:Name="_wordBox6" Grid.Row="6"></local:WordleTextBox>
         <Button Grid.Row="7" Width="100" Height="50" Click="OnConfirmEntryClick">
             Confirm Entry
         </Button>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFWordleCheats.Model;
 
 namespace WPFWordleCheats.View
 {
@@ -33,17 +35,27 @@ namespace WPFWordleCheats.View
         /// <summary>
         /// Property to let other controls know that the textbox has been populated
         /// </summary>
-        public bool TextBoxFilled => Text1.Length == 1 && Text2.Length == 1 && Text3.Length == 1 && Text4.Length == 1 && Text5.Length == 1;
-        public WordleTextBoxState TextBoxState => new WordleTextBoxState(InputText, GetCurrentColorState());
+        public bool TextBoxFilled => Text1?.Length == 1 && Text2?.Length == 1 && Text3?.Length == 1 && Text4?.Length == 1 && Text5?.Length == 1;
+
+        public static readonly DependencyProperty WorldeStateDependencyProperty = DependencyProperty.Register(nameof(TextboxState), typeof(WordleState),
+         typeof(WordleTextBox), new FrameworkPropertyMetadata(null));
+             
+        public WordleState TextboxState
+        {
+            get { return (WordleState)GetValue(WorldeStateDependencyProperty); }
+            set { SetValue(WorldeStateDependencyProperty, value); }
+        }
+
+        public bool HasBeenProcessed { get; set; }
 
         public WordleTextBox()
         {
             InitializeComponent();
         }
 
-        private char[] GetCurrentColorState()
+        private string GetCurrentColorState()
         {
-            char[] result =
+            char[] temp =
             [
                 GetColor(_firstChar.Background),
                 GetColor(_secondChar.Background),
@@ -51,7 +63,8 @@ namespace WPFWordleCheats.View
                 GetColor(_fourthChar.Background),
                 GetColor(_fifthChar.Background),
             ];
-            return result;
+
+            return new string(temp);
         }
 
         private char GetColor(Brush brush)
@@ -100,7 +113,7 @@ namespace WPFWordleCheats.View
                 Text5 = "";
 
             OnPropertyChanged(nameof(TextBoxFilled));
-            OnPropertyChanged(nameof(TextBoxState));
+            TextboxState =  new WordleState(InputText, GetCurrentColorState());
         }
 
 
@@ -205,7 +218,8 @@ namespace WPFWordleCheats.View
                 else
                     charTextBox.Background = Brushes.DarkGray;
             }
-            OnPropertyChanged(nameof(TextBoxState));
+            if(!String.IsNullOrEmpty(InputText))
+                 TextboxState = new WordleState(InputText, GetCurrentColorState());
         }
 
         /// <summary>
@@ -219,40 +233,6 @@ namespace WPFWordleCheats.View
             if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[a-zA-Z]+$"))
             {
                 e.Handled = true;
-            }
-        }
-
-        public enum ColorStates
-        {
-            DarkGray,
-            Yellow,
-            Green,
-        }
-
-
-        public class WordleTextBoxState
-        {
-            public Dictionary<char, ColorStates> State { get; }
-            public WordleTextBoxState(string guess, char[] colors)
-            {
-                var _state = new Dictionary<char, ColorStates>();
-
-                for (int i = 0; i < guess.Length; i++)
-                {
-                    switch(colors[i])
-                    {
-                        case 'D':
-                            _state[guess[i]] = ColorStates.DarkGray;
-                            break;
-                        case 'Y':
-                            _state[guess[i]] = ColorStates.Yellow;
-                            break;
-                        case 'G':
-                            _state[guess[i]] = ColorStates.Green;  
-                            break;
-                    }
-                }
-                State = _state;
             }
         }
     }

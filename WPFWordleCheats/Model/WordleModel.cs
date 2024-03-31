@@ -13,15 +13,13 @@ namespace WPFWordleCheats.Model
         private static readonly string _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
         private static readonly string DictionaryFileName = Path.Combine(_projectDirectory, "Resources\\wordledictionary.txt");
         private string _word;
+
         private HashSet<string> possibleWords = new HashSet<string>();
 
-        private char[] _state = new char[5];
-        public WordleModel(string word, char[] state)
+        public WordleModel(WordleState state)
         {
-            this._word = word;
-            this._state = state;
+            this._word = state.Guess;
             this.InitializePossibleWords();
-            var b = 2;
         }
 
         private void InitializePossibleWords()
@@ -53,16 +51,6 @@ namespace WPFWordleCheats.Model
             {
                 _word = value;
                 OnPropertyChanged(nameof(Word));
-            }
-        }
-
-        public char[] State
-        {
-            get { return _state; }
-            set
-            {
-                _state = value;
-                OnPropertyChanged(nameof(State));
             }
         }
     }

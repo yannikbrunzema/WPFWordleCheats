@@ -12,6 +12,13 @@ namespace WPFWordleCheats.ViewModel
         private string _word = string.Empty;
         private string _colorState = string.Empty;
 
+        public WordleState State1 { get; set; }
+        public WordleState State2 { get; set; }
+        public WordleState State3 { get; set; }
+        public WordleState State4 { get; set; }
+        public WordleState State5 { get; set; }
+        public WordleState State6 { get; set; }
+
         public WordleViewModel() : base() 
         {
             
@@ -37,9 +44,6 @@ namespace WPFWordleCheats.ViewModel
                 OnPropertyChanged(nameof(Model));
             }
         }
-
-
-        public WordleModel Model => new WordleModel(this.Word, this.ColorState.ToCharArray());
 
         public override string ViewModelTitle => "Wordle Cheats";
     }

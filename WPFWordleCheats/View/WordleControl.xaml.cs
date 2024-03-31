@@ -43,9 +43,10 @@ namespace WPFWordleCheats.View
         {
             foreach(var word in _words)
             {
-                if (word.TextBoxFilled)
+                if (word.TextBoxFilled && !word.HasBeenProcessed)
                 {
-                    var state = word.TextBoxState;
+                    word.HasBeenProcessed = true;   
+                    var state = word.TextboxState;
                 }
             }
         }
