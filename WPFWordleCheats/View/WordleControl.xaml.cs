@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFWordleCheats.Model;
+using WPFWordleCheats.ViewModel;
 
 namespace WPFWordleCheats.View
 {
@@ -27,6 +29,9 @@ namespace WPFWordleCheats.View
         private WordleTextBox _textbox5;
         private WordleTextBox _textbox6;
         private List<WordleTextBox> _words;
+
+        private WordleModel _currentModel;
+
         public WordleControl()
         {
             InitializeComponent();
@@ -45,8 +50,9 @@ namespace WPFWordleCheats.View
             {
                 if (word.TextBoxFilled && !word.HasBeenProcessed)
                 {
-                    word.HasBeenProcessed = true;   
-                    var state = word.TextboxState;
+                    var viewModel = (WordleViewModel)DataContext;
+                    viewModel.WordleModel.UpdateModel(word.TextboxState);
+                    word.HasBeenProcessed = true;
                 }
             }
         }

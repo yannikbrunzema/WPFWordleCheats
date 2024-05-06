@@ -16,11 +16,43 @@ namespace WPFWordleCheats.Model
 
         private HashSet<string> possibleWords = new HashSet<string>();
 
-        public WordleModel(WordleState state)
+        private enum Color
         {
-            this._word = state.Guess;
+            Gray,
+            Yellow,
+            Green
+        };
+
+        public WordleModel()
+        {
             this.InitializePossibleWords();
         }
+
+        public void UpdateModel(WordleState state)
+        {
+            int index = 0;
+            var map = state.State;
+            foreach (Tuple<char, char> stateTuple in map)
+            {
+                if (stateTuple.Item2 == 'D')
+                    RemoveGrayLetterWords(stateTuple.Item1);
+                if (stateTuple.Item2 == 'Y')
+                    RemoveYellowLetters(stateTuple.Item1, index);
+                if (stateTuple.Item2 == 'G')
+                    RemoveGreenLetterWords(stateTuple.Item1, index);    
+
+                index++;
+            }
+
+            OnPropertyChanged(nameof(PossibleWords));
+        }
+
+        public bool IsGuessValid(string word)
+        {
+            return possibleWords.Contains(word);
+        }
+
+        public List<String> PossibleWords => possibleWords.ToList();
 
         private void InitializePossibleWords()
         {
@@ -28,10 +60,51 @@ namespace WPFWordleCheats.Model
             {
                 var dictionaryLines = File.ReadAllLines(DictionaryFileName);
                 foreach (var dictionaryLine in dictionaryLines)
-                    possibleWords.Add(dictionaryLine);
+                    possibleWords.Add(dictionaryLine.ToUpper());
             }
             catch { }
         }
+
+        private void RemoveGrayLetterWords(char letter)
+        {
+            foreach (var word in possibleWords)
+            {
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (letter == word[i])
+                    {
+                        possibleWords.Remove(word);
+                        continue;
+                    }
+                }
+            }
+        }
+
+        private void RemoveYellowLetters(char letter, int index)
+        {
+            foreach (var word in possibleWords)
+            {
+                // We only want to keep words that contain the yellow letter, but are not at the same index
+                if (word.Contains(letter) && word.IndexOf(letter) != index)
+                    continue;
+                else
+                    possibleWords.Remove(word); 
+            }
+        }
+
+        private void RemoveGreenLetterWords(char letter, int index)
+        {
+            foreach (var word in possibleWords)
+            {
+                // Remove words that don't have the green letter at the specified index
+                if (word.Contains(letter) && word.IndexOf(letter) == index)
+                    continue;
+                else
+                    possibleWords.Remove(word);
+            }
+        }
+
+     
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

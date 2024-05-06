@@ -31,15 +31,103 @@ namespace WPFWordleCheats.View
         private string _text5;
         private string _inputText;
 
-
         /// <summary>
         /// Property to let other controls know that the textbox has been populated
         /// </summary>
         public bool TextBoxFilled => Text1?.Length == 1 && Text2?.Length == 1 && Text3?.Length == 1 && Text4?.Length == 1 && Text5?.Length == 1;
 
-        public static readonly DependencyProperty WorldeStateDependencyProperty = DependencyProperty.Register(nameof(TextboxState), typeof(WordleState),
-         typeof(WordleTextBox), new FrameworkPropertyMetadata(null));
-             
+        public static readonly DependencyProperty WorldeStateDependencyProperty = DependencyProperty.Register(nameof(TextboxState),
+                                                                                                        typeof(WordleState),
+                                                                                                        typeof(WordleTextBox), new FrameworkPropertyMetadata(null));
+
+        public string InputText
+        {
+            get { return _inputText; }
+            set
+            {
+                if (_inputText != value)
+                {
+                    _inputText = value.ToUpper();
+                    OnPropertyChanged(nameof(InputText));
+                    UpdateTextBlocks();
+                }
+            }
+        }
+
+        public string Text1
+        {
+            get { return _text1; }
+            set
+            {
+                if (_text1 != value)
+                {
+                    _text1 = value;
+                    OnPropertyChanged(nameof(Text1));
+                }
+            }
+        }
+
+        public string Text2
+        {
+            get { return _text2; }
+            set
+            {
+                if (_text2 != value)
+                {
+                    _text2 = value;
+                    OnPropertyChanged(nameof(Text2));
+                }
+            }
+        }
+
+        public string Text3
+        {
+            get { return _text3; }
+            set
+            {
+                if (_text3 != value)
+                {
+                    _text3 = value;
+                    OnPropertyChanged(nameof(Text3));
+                }
+            }
+        }
+
+        public string Text4
+        {
+            get { return _text4; }
+            set
+            {
+                if (_text4 != value)
+                {
+                    _text4 = value;
+                    OnPropertyChanged(nameof(Text4));
+                }
+            }
+        }
+
+        public string Text5
+        {
+            get { return _text5; }
+            set
+            {
+                if (_text5 != value)
+                {
+                    _text5 = value;
+                    OnPropertyChanged(nameof(Text5));
+                }
+            }
+        }
+
+
+
+        private Dictionary<Brush, char> BrushCharMap = new Dictionary<Brush, char>()
+        {
+            { Brushes.DarkGray, 'D' },
+            { Brushes.Yellow, 'Y' },
+            { Brushes.Green, 'G' },
+        };
+
         public WordleState TextboxState
         {
             get { return (WordleState)GetValue(WorldeStateDependencyProperty); }
@@ -69,13 +157,9 @@ namespace WPFWordleCheats.View
 
         private char GetColor(Brush brush)
         {
-            if (brush == Brushes.DarkGray)
-                return 'D';
-            else if (brush == Brushes.Yellow)
-                return 'Y';
-            else if (brush == Brushes.Green)
-                return 'G';
-            return 'D'; // making gray default for now
+            if(BrushCharMap.ContainsKey(brush))
+                return BrushCharMap[brush];
+            return 'D';
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -113,94 +197,14 @@ namespace WPFWordleCheats.View
                 Text5 = "";
 
             OnPropertyChanged(nameof(TextBoxFilled));
-            TextboxState =  new WordleState(InputText, GetCurrentColorState());
+            if(TextboxState != null)
+                TextboxState.UpdateState(new WordleState(InputText, GetCurrentColorState()));
+            else
+                TextboxState = new WordleState(InputText, GetCurrentColorState());
         }
 
 
-      
-        public string InputText
-        {
-            get { return _inputText; }
-            set
-            {
-                if (_inputText != value)
-                {
-                    _inputText = value.ToUpper();
-                    OnPropertyChanged(nameof(InputText));
-                    UpdateTextBlocks();
-                }
-            }
-        }
-
-
-        public string Text1
-        {
-            get { return _text1; }
-            set
-            {
-                if (_text1 != value)
-                {
-                    _text1 = value;
-                    OnPropertyChanged(nameof(Text1));
-                }
-            }
-        }
-
-        
-        public string Text2
-        {
-            get { return _text2; }
-            set
-            {
-                if (_text2 != value)
-                {
-                    _text2 = value;
-                    OnPropertyChanged(nameof(Text2));
-                }
-            }
-        }
-
-
-        public string Text3
-        {
-            get { return _text3; }
-            set
-            {
-                if (_text3 != value)
-                {
-                    _text3 = value;
-                    OnPropertyChanged(nameof(Text3));
-                }
-            }
-        }
-
-       
-        public string Text4
-        {
-            get { return _text4; }
-            set
-            {
-                if (_text4 != value)
-                {
-                    _text4 = value;
-                    OnPropertyChanged(nameof(Text4));
-                }
-            }
-        }
-
-        public string Text5
-        {
-            get { return _text5; }
-            set
-            {
-                if (_text5 != value)
-                {
-                    _text5 = value;
-                    OnPropertyChanged(nameof(Text5));
-                }
-            }
-        }
-
+    
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _inputTextBox.Focus();
@@ -219,7 +223,12 @@ namespace WPFWordleCheats.View
                     charTextBox.Background = Brushes.DarkGray;
             }
             if(!String.IsNullOrEmpty(InputText))
-                 TextboxState = new WordleState(InputText, GetCurrentColorState());
+            {
+                if(TextboxState != null)
+                    TextboxState.UpdateState(new WordleState(InputText, GetCurrentColorState()));
+                else
+                    TextboxState = new WordleState(InputText, GetCurrentColorState());
+            }
         }
 
         /// <summary>

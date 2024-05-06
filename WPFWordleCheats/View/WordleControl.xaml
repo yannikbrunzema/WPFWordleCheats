@@ -36,8 +36,18 @@
         <local:WordleTextBox TextboxState="{Binding State4, Mode=TwoWay}" x:Name="_wordBox4" Grid.Row="4"></local:WordleTextBox>
         <local:WordleTextBox TextboxState="{Binding State5, Mode=TwoWay}" x:Name="_wordBox5" Grid.Row="5"></local:WordleTextBox>
         <local:WordleTextBox TextboxState="{Binding State6, Mode=TwoWay}" x:Name="_wordBox6" Grid.Row="6"></local:WordleTextBox>
+        <Grid Grid.RowSpan="4" Grid.Row="2" Width="200" Margin="750,0,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding WordleModel.PossibleWords, UpdateSourceTrigger=PropertyChanged}" />
+            </ScrollViewer>
+        </Grid>
         <Button Grid.Row="7" Width="100" Height="50" Click="OnConfirmEntryClick">
-            Confirm Entry
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+            Confirm
         </Button>
 
 
